@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class PoiseSpark extends Entity {
 
     private int ticksLeft = 10;
-    private Vec3d target;
+    private Vec3d target = Vec3d.ZERO;
     public final long seed;
 
     public PoiseSpark(EntityType<?> type, World world) {
