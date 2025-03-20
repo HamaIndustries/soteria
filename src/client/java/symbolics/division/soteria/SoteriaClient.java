@@ -10,10 +10,12 @@ import symbolics.division.spirit_vector.logic.ISpiritVectorUser;
 public class SoteriaClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        SoterianLance.hitCallback = (target, player, damage) -> {
+        SoterianLance.hitCallback = (target, player, damage, pos) -> {
             if (player instanceof ISpiritVectorUser user && user.spiritVector() != null) {
-                ClientPlayNetworking.send(new PoiseSparkAttackC2S(damage, target.getId()));
+                int id = target == null ? 0 : target.getId();
+                ClientPlayNetworking.send(new PoiseSparkAttackC2S(damage, id, pos));
             }
+            return true;
         };
 
         EntityRendererRegistry.register(SoterianEntities.POISE_SPARK, PoiseSparkRenderer::new);

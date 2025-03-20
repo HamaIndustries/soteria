@@ -1,5 +1,6 @@
 package symbolics.division.soteria.item;
 
+import com.mojang.datafixers.util.Function4;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +18,8 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.function.TriConsumer;
+import symbolics.division.soteria.SoterianEntities;
+import symbolics.division.soteria.entity.PoiseSpark;
 import symbolics.division.spirit_vector.logic.ISpiritVectorUser;
 import symbolics.division.spirit_vector.logic.vector.SpiritVector;
 
@@ -25,8 +27,7 @@ public class SoterianLance extends Item {
     // evil but ok because only processed on client
     private int charge = 0;
 
-    public static TriConsumer<Entity, LivingEntity, Float> hitCallback = (a, b, c) -> {
-    };
+    public static Function4<Entity, LivingEntity, Float, Vec3d, Boolean> hitCallback = (target, player, damage, pos) -> false;
 
     public SoterianLance() {
         super(new Item.Settings()
@@ -59,12 +60,10 @@ public class SoterianLance extends Item {
 
     public static void makeSpark(World world, Entity source, Vec3d target) {
         if (!world.isClient) {
-//            PoiseSpark spark = (PoiseSpark) SoterianEntities.POISE_SPARK.create(world);
-//            world.spawnEntity(spark);
-//            spark.refreshPositionAfterTeleport(source.getEyePos().add(source.getRotationVec(0).rotateY(-0.1f)));
-//            spark.setTarget(target);
-//            spark.lookAt(EntityAnchorArgumentType.EntityAnchor.FEET, target);
-//            int a = 1;
+            PoiseSpark spark = SoterianEntities.POISE_SPARK.create(world);
+            world.spawnEntity(spark);
+            spark.refreshPositionAfterTeleport(source.getEyePos().add(source.getRotationVec(0).rotateY(-0.1f)));
+            spark.setTarget(target);
         }
     }
 
@@ -86,11 +85,13 @@ public class SoterianLance extends Item {
                 world.addParticle(ParticleTypes.CRIT, p.x, p.y, p.z, 0, 0, 0);
             }
 
+            float DAMAGE_POISE_RATIO = 1f / 5; // 100 poise (full) = 20 damage
             if (result != null) {
                 if (result.getType().equals(HitResult.Type.ENTITY) && world.isClient) {
-                    float DAMAGE_POISE_RATIO = 1f / 10;
-                    hitCallback.accept(result.getEntity(), user, charge * DAMAGE_POISE_RATIO);
+                    hitCallback.apply(result.getEntity(), user, charge * DAMAGE_POISE_RATIO, result.getPos());
                     charge = 0;
+                } else {
+                    hitCallback.apply(null, user, charge * DAMAGE_POISE_RATIO, result.getPos());
                 }
             }
         }
