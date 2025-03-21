@@ -9,7 +9,7 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TridentItem;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
@@ -19,6 +19,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import symbolics.division.soteria.SoterianEntities;
+import symbolics.division.soteria.SoterianSounds;
 import symbolics.division.soteria.entity.PoiseSpark;
 import symbolics.division.spirit_vector.logic.ISpiritVectorUser;
 import symbolics.division.spirit_vector.logic.vector.SpiritVector;
@@ -49,6 +50,12 @@ public class SoterianLance extends Item {
 
     @Override
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+        if (SpiritVector.hasEquipped(user) && /*remainingUseTicks % 2 == 0 &&*/ user instanceof PlayerEntity player) {
+            int TICKS_TO_MAX = 100;
+            int useticks = 72000 - remainingUseTicks;
+            float pitch = Math.clamp((float) useticks / TICKS_TO_MAX + 0.5f, 0.5f, 1f);
+            world.playSoundFromEntity(player, SoterianSounds.STAFF_CHARGE_COMBINED, SoundCategory.PLAYERS, 0.2f, pitch);
+        }
         if (user instanceof ISpiritVectorUser svUser) {
             SpiritVector sv = svUser.spiritVector();
             if (sv == null || sv.getMomentum() < 1) return;
@@ -71,29 +78,26 @@ public class SoterianLance extends Item {
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         float MAX_DISTANCE = 200f;
         if (user instanceof PlayerEntity player && charge > 0) {
+            world.playSoundFromEntity(user, SoterianSounds.STAFF_SHOOT, SoundCategory.PLAYERS, 0.9f, 1f);
+
             Vec3d look = player.getRotationVec(0);
             Vec3d end = player.getEyePos().add(look.multiply(MAX_DISTANCE));
             EntityHitResult result = ProjectileUtil.raycast(player, player.getEyePos(), end, player.getBoundingBox().expand(MAX_DISTANCE * 2), Entity::canBeHitByProjectile, MAX_DISTANCE);
 
-            Vec3d from = player.getEyePos().add(look);
-            Vec3d to = result != null ? result.getPos() : end;
-            Vec3d along = to.subtract(from);
-            double len = along.length();
-            Vec3d anchor = player.getEyePos().add(look);
-            for (float i = 0; i < len; i++) {
-                Vec3d p = anchor.add(along.multiply(i / len));
-                world.addParticle(ParticleTypes.CRIT, p.x, p.y, p.z, 0, 0, 0);
-            }
-
             float DAMAGE_POISE_RATIO = 1f / 5; // 100 poise (full) = 20 damage
-            if (result != null) {
-                if (result.getType().equals(HitResult.Type.ENTITY) && world.isClient) {
-                    hitCallback.apply(result.getEntity(), user, charge * DAMAGE_POISE_RATIO, result.getPos());
-                    charge = 0;
+            if (world.isClient) {
+                if (result != null) {
+                    if (result.getType().equals(HitResult.Type.ENTITY)) {
+                        hitCallback.apply(result.getEntity(), user, charge * DAMAGE_POISE_RATIO, result.getPos());
+                        charge = 0;
+                    } else {
+                        hitCallback.apply(null, user, charge * DAMAGE_POISE_RATIO, result.getPos());
+                    }
                 } else {
-                    hitCallback.apply(null, user, charge * DAMAGE_POISE_RATIO, result.getPos());
+                    hitCallback.apply(null, user, charge * DAMAGE_POISE_RATIO, user.getRotationVecClient().multiply(MAX_DISTANCE).add(user.getPos()));
                 }
             }
+
         }
         super.onStoppedUsing(stack, world, user, remainingUseTicks);
     }

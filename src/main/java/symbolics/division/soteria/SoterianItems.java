@@ -6,7 +6,8 @@ import net.minecraft.registry.Registry;
 import symbolics.division.soteria.item.SoterianLance;
 
 public class SoterianItems {
-    public static void init() {}
+    public static void init() {
+    }
 
-    public static final Item SOTERIAN_LANCE = Registry.register(Registries.ITEM, Soteria.id("soteria"), new SoterianLance());
+    public static final Item SOTERIAN_LANCE = Registry.register(Registries.ITEM, Soteria.id("soterian_lance"), new SoterianLance());
 }

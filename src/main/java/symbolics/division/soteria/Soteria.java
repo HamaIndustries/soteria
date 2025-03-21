@@ -34,7 +34,9 @@ public class Soteria implements ModInitializer {
         // Proceed with mild caution.
 
         SoterianItems.init();
+        SoterianAttachments.init();
         SoterianEntities.init();
+        SoterianSounds.init();
 
         registerC2S(PoiseSparkAttackC2S.ID, PoiseSparkAttackC2S.CODEC, PoiseSparkAttackC2S::HANDLER);
     }

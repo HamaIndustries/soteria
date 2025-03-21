@@ -1,0 +1,26 @@
+{
+  "staff.charge.start": {
+    "subtitle": "subtitles.soteria.staff.charge.start",
+    "sounds": [
+      "soteria:staff_charge_start"
+    ]
+  },
+  "staff.charge.combined": {
+    "subtitle": "subtitles.soteria.staff.charge.combined",
+    "sounds": [
+      "soteria:staff_charge_combined"
+    ]
+  },
+  "staff.charge.end": {
+    "subtitle": "subtitles.soteria.staff.charge.end",
+    "sounds": [
+      "soteria:staff_charge_end"
+    ]
+  },
+  "staff.shoot": {
+    "subtitle": "subtitles.soteria.staff.shoot",
+    "sounds": [
+      "soteria:staff_shoot"
+    ]
+  }
+}
