@@ -16,9 +16,11 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import symbolics.division.soteria.SoterianEntities;
+import symbolics.division.soteria.SoterianItems;
 import symbolics.division.soteria.SoterianSounds;
 import symbolics.division.soteria.entity.PoiseSpark;
 import symbolics.division.spirit_vector.logic.ISpiritVectorUser;
@@ -61,7 +63,9 @@ public class SoterianLance extends Item {
             if (sv == null || sv.getMomentum() < 1) return;
             int POISE_PER_TICK = 1;
             sv.modifyMomentum(-POISE_PER_TICK);
-            charge += POISE_PER_TICK;
+            if (charge < SpiritVector.MAX_MOMENTUM) {
+                charge += POISE_PER_TICK;
+            }
         }
     }
 
@@ -80,23 +84,32 @@ public class SoterianLance extends Item {
         if (user instanceof PlayerEntity player && charge > 0) {
             world.playSoundFromEntity(user, SoterianSounds.STAFF_SHOOT, SoundCategory.PLAYERS, 0.9f, 1f);
 
-            Vec3d look = player.getRotationVec(0);
+            player.getItemCooldownManager().set(SoterianItems.SOTERIAN_LANCE, 20);
+
+            if (!world.isClient) return;
+            Vec3d look = player.getRotationVecClient();
             Vec3d end = player.getEyePos().add(look.multiply(MAX_DISTANCE));
-            EntityHitResult result = ProjectileUtil.raycast(player, player.getEyePos(), end, player.getBoundingBox().expand(MAX_DISTANCE * 2), Entity::canBeHitByProjectile, MAX_DISTANCE);
+            EntityHitResult result = ProjectileUtil.raycast(
+                    player,
+                    player.getEyePos(),
+                    end,
+                    new Box(player.getEyePos(), end),
+                    Entity::canBeHitByProjectile,
+                    MAX_DISTANCE * MAX_DISTANCE
+            );
 
             float DAMAGE_POISE_RATIO = 1f / 5; // 100 poise (full) = 20 damage
-            if (world.isClient) {
-                if (result != null) {
-                    if (result.getType().equals(HitResult.Type.ENTITY)) {
-                        hitCallback.apply(result.getEntity(), user, charge * DAMAGE_POISE_RATIO, result.getPos());
-                        charge = 0;
-                    } else {
-                        hitCallback.apply(null, user, charge * DAMAGE_POISE_RATIO, result.getPos());
-                    }
+            if (result != null) {
+                if (result.getType().equals(HitResult.Type.ENTITY)) {
+                    hitCallback.apply(result.getEntity(), user, charge * DAMAGE_POISE_RATIO, result.getPos());
+                    charge = 0;
                 } else {
-                    hitCallback.apply(null, user, charge * DAMAGE_POISE_RATIO, user.getRotationVecClient().multiply(MAX_DISTANCE).add(user.getPos()));
+                    hitCallback.apply(null, user, charge * DAMAGE_POISE_RATIO, result.getPos());
                 }
+            } else {
+                hitCallback.apply(null, user, charge * DAMAGE_POISE_RATIO, user.getRotationVecClient().multiply(MAX_DISTANCE).add(user.getPos()));
             }
+
 
         }
         super.onStoppedUsing(stack, world, user, remainingUseTicks);
