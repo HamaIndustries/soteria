@@ -21,7 +21,7 @@ dependencies {
 
     modImplementation libs.fapi
 
-    modCompileOnly libs.dancerizer
+    modImplementation libs.spiritVector
 }
 
 loom {
@@ -33,8 +33,6 @@ loom {
             sourceSet sourceSets.client
         }
     }
-
-    accessWidenerPath = file("src/main/resources/spirit_vector.accesswidener")
 }
 
 fabricApi {
@@ -56,8 +54,7 @@ processResources {
             members       : "${authors}. Contributions by ${contributors}",
             mc            : compatibleVersions.split(", ")[0],
             fl            : libs.versions.fl.get(),
-            fapi          : libs.versions.fapi.get(),
-            dancerizer    : libs.versions.dancerizer.get(),
+            fapi          : libs.versions.fapi.get()
     ]
     inputs.properties(meta)
     filesMatching("*.mod.json") { expand(meta) }
@@ -102,10 +99,10 @@ modrinth {
     gameVersions = compatibleVersions.split(", ").toList()
     loaders = compatibleLoaders.split(", ").toList()
     changelog = !file("CHANGELOG.md").exists() ? "" : rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/${user}/${slug}/releases/tag/v${baseVersion}+${tagBranch}"
-    syncBodyFrom = rootProject.file("README.md").text
+    syncBodyFrom = !file("README.md").exists() ? "" : rootProject.file("README.md").text
     dependencies {
         required.version libs.fapi.get().getName(), libs.versions.fapi.get()
-        optional.version libs.dancerizer.get().getName(), libs.versions.dancerizer.get()
+        required.version libs.spiritVector.get().getName(), libs.versions.spiritVector.get()
     }
 }
 
