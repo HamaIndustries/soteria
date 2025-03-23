@@ -1,0 +1,24 @@
+[versions]
+loom = "1.7.+"
+githubRelease = "2.4.1"
+minotaur = "2.+"
+
+mc = "1.21"
+fl = "0.16.10"
+yarn = "1.21.1+build.3"
+fapi = "0.115.1+1.21.1"
+
+spirit_vector = "1.10.4+1.21.1"
+
+[plugins]
+loom = { id = "fabric-loom", version.ref = "loom" }
+githubRelease = { id = "com.github.breadmoirai.github-release", version.ref = "githubRelease" }
+minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
+
+[libraries]
+mc = { group = "mojang", name = "minecraft", version.ref = "mc" }
+fl = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fl" }
+yarn = { group = "net.fabricmc", name = "yarn", version.ref = "yarn" }
+fapi = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fapi" }
+
+spirit_vector = { group = "maven.modrinth", name = "spirit-vector", version.ref = "spirit_vector" }
