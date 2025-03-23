@@ -9,6 +9,7 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import symbolics.division.soteria.compat.ModCompatibility;
 import symbolics.division.soteria.network.PoiseSparkAttackC2S;
 
 public class Soteria implements ModInitializer {
@@ -39,6 +40,8 @@ public class Soteria implements ModInitializer {
         SoterianSounds.init();
 
         registerC2S(PoiseSparkAttackC2S.ID, PoiseSparkAttackC2S.CODEC, PoiseSparkAttackC2S::HANDLER);
+
+        ModCompatibility.init();
     }
 
     private <T extends CustomPayload>

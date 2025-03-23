@@ -10,6 +10,8 @@ fapi = "0.115.1+1.21.1"
 
 spiritVector = "1.10.4+1.21.1"
 
+marksman = "1.2.2"
+
 [plugins]
 loom = { id = "fabric-loom", version.ref = "loom" }
 githubRelease = { id = "com.github.breadmoirai.github-release", version.ref = "githubRelease" }
@@ -22,3 +24,4 @@ yarn = { group = "net.fabricmc", name = "yarn", version.ref = "yarn" }
 fapi = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fapi" }
 
 spiritVector = { group = "maven.modrinth", name = "spirit-vector", version.ref = "spiritVector" }
+marksman = { group = "maven.modrinth", name = "marksman", version.ref = "marksman" }

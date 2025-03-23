@@ -5,7 +5,6 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TridentItem;
@@ -16,10 +15,8 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import symbolics.division.soteria.SoterianEntities;
 import symbolics.division.soteria.SoterianItems;
 import symbolics.division.soteria.SoterianSounds;
 import symbolics.division.soteria.entity.PoiseSpark;
@@ -69,15 +66,6 @@ public class SoterianLance extends Item {
         }
     }
 
-    public static void makeSpark(World world, Entity source, Vec3d target) {
-        if (!world.isClient) {
-            PoiseSpark spark = SoterianEntities.POISE_SPARK.create(world);
-            world.spawnEntity(spark);
-            spark.refreshPositionAfterTeleport(source.getEyePos().add(source.getRotationVec(0).rotateY(-0.1f)));
-            spark.setTarget(target);
-        }
-    }
-
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         float MAX_DISTANCE = 200f;
@@ -89,14 +77,7 @@ public class SoterianLance extends Item {
             if (!world.isClient) return;
             Vec3d look = player.getRotationVecClient();
             Vec3d end = player.getEyePos().add(look.multiply(MAX_DISTANCE));
-            EntityHitResult result = ProjectileUtil.raycast(
-                    player,
-                    player.getEyePos(),
-                    end,
-                    new Box(player.getEyePos(), end),
-                    Entity::canBeHitByProjectile,
-                    MAX_DISTANCE * MAX_DISTANCE
-            );
+            EntityHitResult result = PoiseSpark.fire(player, player.getEyePos(), end);
 
             float DAMAGE_POISE_RATIO = 1f / 5; // 100 poise (full) = 20 damage
             if (result != null) {
