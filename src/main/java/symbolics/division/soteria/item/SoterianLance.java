@@ -13,6 +13,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
@@ -89,6 +90,12 @@ public class SoterianLance extends Item {
                 }
             } else {
                 hitCallback.apply(null, user, charge * DAMAGE_POISE_RATIO, user.getRotationVecClient().multiply(MAX_DISTANCE).add(user.getPos()));
+                HitResult rocketJump = player.raycast(player.getBlockInteractionRange(), 0, false);
+                if (rocketJump instanceof BlockHitResult hit) {
+                    Vec3d dir = player.getEyePos().subtract(hit.getPos());
+                    double strength = (float) charge / SpiritVector.MAX_MOMENTUM * Math.max(0, 4 - dir.length());
+                    player.addVelocity(dir.normalize().multiply(strength));
+                }
             }
 
 
