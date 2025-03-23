@@ -118,6 +118,7 @@ public class SoterianLance extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
+        if (user.getItemCooldownManager().isCoolingDown(itemStack.getItem())) return TypedActionResult.pass(itemStack);
         user.setCurrentHand(hand);
         if (world.isClient) {
             charge = 0;
