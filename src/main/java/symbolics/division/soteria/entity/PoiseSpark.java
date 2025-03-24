@@ -2,6 +2,7 @@ package symbolics.division.soteria.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ProjectileDeflection;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -19,19 +20,29 @@ import symbolics.division.soteria.SoterianEntities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static symbolics.division.soteria.SoterianAttachments.POISE_TARGET;
 
 public class PoiseSpark extends ProjectileEntity {
 
+    public record DeflectionContext(PoiseSpark spark, ProjectileDeflection deflection, @Nullable Entity deflector,
+                                    @Nullable Entity owner, boolean fromAttack) {
+    }
+
     public static final int MAX_TICKS = 25;
     public static final float MAX_DISTANCE = 200f;
 
     private static final List<Predicate<Entity>> attackPredicates = new ArrayList<>();
+    private static final List<Function<DeflectionContext, Boolean>> deflectionCallbacks = new ArrayList<>();
 
     public static void registerPredicate(Predicate<Entity> predicate) {
         attackPredicates.add(predicate);
+    }
+
+    public static void registerDeflectionCallback(Function<DeflectionContext, Boolean> cb) {
+        deflectionCallbacks.add(cb);
     }
 
     static {
@@ -68,7 +79,6 @@ public class PoiseSpark extends ProjectileEntity {
     private float damage;
     public final long seed;
     protected Vec3d initialPos;
-
 
     public PoiseSpark(EntityType<? extends ProjectileEntity> entityType, World world) {
         super(entityType, world);
@@ -120,6 +130,19 @@ public class PoiseSpark extends ProjectileEntity {
     }
 
     @Override
+    public boolean deflect(ProjectileDeflection deflection, @Nullable Entity deflector, @Nullable Entity owner, boolean fromAttack) {
+        if (!this.getWorld().isClient) {
+            DeflectionContext ctx = new DeflectionContext(this, deflection, deflector, owner, fromAttack);
+            this.setOwner(owner);
+            for (var cb : deflectionCallbacks) {
+                if (cb.apply(ctx)) return true;
+            }
+            this.onDeflected(deflector, fromAttack);
+        }
+        return true;
+    }
+
+    @Override
     protected void onDeflected(@Nullable Entity deflector, boolean fromAttack) {
         if (!this.getWorld().isClient) {
             // now faces a new direction
@@ -141,5 +164,9 @@ public class PoiseSpark extends ProjectileEntity {
         if (hitResult instanceof EntityHitResult ehr && this.getOwner() instanceof PlayerEntity player) {
             ehr.getEntity().damage(this.getWorld().getDamageSources().playerAttack(player), damage);
         }
+    }
+
+    public float getDamage() {
+        return damage;
     }
 }

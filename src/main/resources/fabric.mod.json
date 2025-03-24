@@ -1,44 +1,44 @@
 {
-	"schemaVersion": 1,
-	"id": "soteria",
-	"version": "${version}",
-	"name": "Soteria",
-	"description": "Salvation for the forgotten",
-	"authors": [
-		"hama"
-	],
-	"contact": {
-		"homepage": "",
-		"sources": ""
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/soteria/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"symbolics.division.soteria.Soteria"
-		],
-		"client": [
-			"symbolics.division.soteria.SoteriaClient"
-		],
-		"fabric-datagen": [
-			"symbolics.division.soteria.SoteriaDataGenerator"
-		]
-	},
-	"mixins": [
-      "soteria.mixins.json",
-		{
-			"config": "soteria.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.16.10",
-		"minecraft": "~1.21.1",
-		"java": ">=21",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+  "schemaVersion": 1,
+  "id": "soteria",
+  "version": "${version}",
+  "name": "Soteria",
+  "description": "Salvation for the forgotten",
+  "authors": [
+    "hama"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/soteria/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "symbolics.division.soteria.Soteria"
+    ],
+    "client": [
+      "symbolics.division.soteria.SoteriaClient"
+    ],
+    "fabric-datagen": [
+      "symbolics.division.soteria.SoteriaDataGenerator"
+    ]
+  },
+  "mixins": [
+    "soteria.mixins.json",
+    {
+      "config": "soteria.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
 }
