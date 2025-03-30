@@ -1,10 +1,19 @@
 {
-	"required": true,
-	"package": "symbolics.division.soteria.mixin.client",
-	"compatibilityLevel": "JAVA_21",
-	"client": [
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "package": "symbolics.division.soteria.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "BipedEntityModelMixinn",
+    "ClientPlayerEntityMixinn",
+    "ClientPlayNetworkHandlerMixin",
+    "DeathScreenMixin",
+    "GameRendererMixinn"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "LivingEntityMixinn",
+    "PlayerEntityMixinn"
+  ]
 }

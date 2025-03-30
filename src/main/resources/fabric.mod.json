@@ -40,5 +40,12 @@
   },
   "suggests": {
     "another-mod": "*"
+  },
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_1309": [
+        "symbolics/division/soteria/api/Unliving"
+      ]
+    }
   }
 }

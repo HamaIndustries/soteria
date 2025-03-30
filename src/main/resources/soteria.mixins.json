@@ -1,10 +1,12 @@
 {
-	"required": true,
-	"package": "symbolics.division.soteria.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "package": "symbolics.division.soteria.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "DamageSourcesMixin",
+    "ServerPlayerEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

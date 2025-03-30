@@ -1,8 +1,10 @@
 package symbolics.division.soteria;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -30,5 +32,8 @@ public class SoteriaClient implements ClientModInitializer {
         };
 
         EntityRendererRegistry.register(SoterianEntities.POISE_SPARK, PoiseSparkRenderer::new);
+        ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            if (entity == MinecraftClient.getInstance().player) Mind.memoir = false;
+        });
     }
 }
