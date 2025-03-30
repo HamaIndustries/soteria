@@ -1,7 +1,9 @@
 {
   "item.soteria.soterian_lance": "Curse Breaker",
-  "subtitles.soteria.staff.charge.combined": "Curse Breaker Charges",
-  "subtitles.soteria.staff.shoot": "Curse Breaker Fires",
+  "item.soteria.armistice": "Armistice",
+  "subtitles.soteria.staff.charge.combined": "Curse Breaker charges",
+  "subtitles.soteria.staff.shoot": "Curse Breaker fires",
+  "subtitles.soteria.murmur": "Distant murmurs",
   "death.attack.armistice.memory": "%s was forgotten.",
   "deathScreen.title.soteria.memoir0": "Don't worry, I won't forget you.",
   "deathScreen.title.soteria.memoir1": "At least we had fun together!",

@@ -11,6 +11,8 @@ public class SoterianSounds {
     public static SoundEvent STAFF_CHARGE_END = of("staff.charge.end");
     public static SoundEvent STAFF_SHOOT = of("staff.shoot");
 
+    public static SoundEvent MURMUR = of("murmur");
+
     private static SoundEvent of(String id) {
         Identifier ident = Soteria.id(id);
         return Registry.register(Registries.SOUND_EVENT, ident, SoundEvent.of(ident));

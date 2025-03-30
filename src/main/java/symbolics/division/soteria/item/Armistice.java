@@ -20,7 +20,7 @@ public class Armistice extends Item {
                 .rarity(Rarity.EPIC)
                 .maxCount(1)
                 .attributeModifiers(SwordItem.createAttributeModifiers(
-                        ToolMaterials.DIAMOND, 5, 1
+                        ToolMaterials.DIAMOND, 696969, 1
                 )));
     }
 
@@ -32,7 +32,8 @@ public class Armistice extends Item {
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if (!entity.getUuid().equals(OWNER) && entity instanceof PlayerEntity e) {
-            e.getInventory().setStack(slot, ItemStack.EMPTY);
+//            e.getInventory().setStack(slot, ItemStack.EMPTY);
+//            boolean a = DamageTypeTags.BYPASSES_INVULNERABILITY world.getDamageSources().registry.get
         }
         super.inventoryTick(stack, world, entity, slot, selected);
     }

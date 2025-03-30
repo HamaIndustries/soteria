@@ -22,5 +22,11 @@
     "sounds": [
       "soteria:staff_shoot"
     ]
+  },
+  "murmur": {
+    "subtitle": "subtitles.soteria.murmur",
+    "sounds": [
+      "soteria:lithium_drops"
+    ]
   }
 }

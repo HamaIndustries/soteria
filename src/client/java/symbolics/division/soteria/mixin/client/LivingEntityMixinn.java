@@ -3,11 +3,14 @@ package symbolics.division.soteria.mixin.client;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -16,16 +19,22 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import symbolics.division.soteria.Mind;
+import symbolics.division.soteria.Murmur;
 import symbolics.division.soteria.SoterianDamageTypes;
+import symbolics.division.soteria.SoterianSounds;
 import symbolics.division.soteria.api.Unliving;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixinn implements Unliving {
+public abstract class LivingEntityMixinn extends Entity implements Unliving {
+    public LivingEntityMixinn(EntityType<?> type, World world) {
+        super(type, world);
+    }
+
     @Shadow
     public abstract float getHealth();
 
     @Unique
-    private int FADE_TIME = 20 * 30;
+    private final int FADE_TIME = 20 * 30;
 
     @Unique
     private int memories = FADE_TIME;
@@ -89,6 +98,8 @@ public abstract class LivingEntityMixinn implements Unliving {
         fading = true;
     }
 
+    private Murmur murmur = null;
+
     @Inject(
             method = "tick",
             at = @At("TAIL")
@@ -97,6 +108,7 @@ public abstract class LivingEntityMixinn implements Unliving {
         if (fading && getHealth() <= 0) {
             memories--;
             if (memories <= 0) Mind.memoir = true;
+            Murmur.track((LivingEntity) (Object) this);
         }
     }
 
@@ -105,7 +117,7 @@ public abstract class LivingEntityMixinn implements Unliving {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getHurtSound(Lnet/minecraft/entity/damage/DamageSource;)Lnet/minecraft/sound/SoundEvent;")
     )
     public SoundEvent soundless(LivingEntity instance, DamageSource source, Operation<SoundEvent> original) {
-        if (source.isOf(SoterianDamageTypes.MEMORY)) return null;
+        if (source.isOf(SoterianDamageTypes.MEMORY)) return SoterianSounds.STAFF_SHOOT;
         else return original.call(instance, source);
     }
 

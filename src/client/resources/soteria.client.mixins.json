@@ -7,7 +7,8 @@
     "ClientPlayerEntityMixinn",
     "ClientPlayNetworkHandlerMixin",
     "DeathScreenMixin",
-    "GameRendererMixinn"
+    "GameRendererMixinn",
+    "MusicTrackerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
