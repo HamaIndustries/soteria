@@ -10,11 +10,11 @@ in vec2 texCoord;
 
 out vec4 fragColor;
 
-float easeOutQuint(in float x) {
+float easeOutQuint(float x) {
     return 1f - pow(1f - x, 10f);
 }
 
-float linearizeDepth(in float depth)
+float linearizeDepth(float depth)
 {
     //return depth;
     float zNear = 0.5;
