@@ -6,9 +6,9 @@ minotaur = "2.+"
 mc = "1.21.1"
 fl = "0.16.10"
 yarn = "1.21.1+build.3"
-fapi = "0.115.1+1.21.1"
+fapi = "0.115.3+1.21.1"
 
-spiritVector = "1.10.4+1.21.1"
+spiritVector = "1.11.2+1.21.1"
 
 marksman = "1.2.2"
 

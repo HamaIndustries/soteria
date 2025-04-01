@@ -24,6 +24,7 @@ public class Mind {
             RenderSystem.disableDepthTest();
             RenderSystem.resetTextureMatrix();
             float r = u.soteria$residue();
+            client.gameRenderer.setRenderHand(false);
             eigengrau.setUniforms("residue", r);
             eigengrau.render(delta);
         }
