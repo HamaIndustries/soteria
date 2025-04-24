@@ -32,6 +32,7 @@ public class SoteriaClient implements ClientModInitializer {
         };
 
         EntityRendererRegistry.register(SoterianEntities.POISE_SPARK, PoiseSparkRenderer::new);
+        EntityRendererRegistry.register(SoterianEntities.PRIDE_SPARK, PrideSparkRenderer::new);
         ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             if (entity == MinecraftClient.getInstance().player) {
                 Mind.memoir = false;

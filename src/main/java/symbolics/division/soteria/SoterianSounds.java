@@ -13,6 +13,8 @@ public class SoterianSounds {
 
     public static SoundEvent MURMUR = of("murmur");
 
+    public static SoundEvent ROAR = of("pride_spark");
+
     private static SoundEvent of(String id) {
         Identifier ident = Soteria.id(id);
         return Registry.register(Registries.SOUND_EVENT, ident, SoundEvent.of(ident));

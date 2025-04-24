@@ -28,5 +28,11 @@
     "sounds": [
       "soteria:ode_to_rust"
     ]
+  },
+  "pride_spark": {
+    "subtitle": "subtitles.soteria.pride_spark",
+    "sounds": [
+      "soteria:pride_spark"
+    ]
   }
 }

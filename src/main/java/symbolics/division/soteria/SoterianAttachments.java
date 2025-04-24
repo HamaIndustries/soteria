@@ -10,6 +10,10 @@ public class SoterianAttachments {
             Soteria.id("spark_target"), builder -> builder.syncWith(PacketCodecs.VECTOR3F, (attachmentTarget, serverPlayerEntity) -> true)
     );
 
+    public static AttachmentType<Integer> PRIDE_TARGET = AttachmentRegistry.create(
+            Soteria.id("pride_target"), builder -> builder.syncWith(PacketCodecs.INTEGER, (attachmentTarget, serverPlayerEntity) -> true)
+    );
+
     public static void init() {
     }
 }
